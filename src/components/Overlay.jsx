@@ -1,12 +1,15 @@
 // style={{ display: 'none' }}
 
-const Overlay = () => {
+const Overlay = ({ onClickCart, cartItems = [] }) => {
+  console.log(cartItems)
+
   return (
     <div className="overlay">
       <div className="overlay__right-side">
         <h2 className="overlay__title">
           Корзина
           <img
+            onClick={onClickCart}
             className="overlay__btn-remove removeBtn"
             src="img/btn-remove.svg"
             alt="Btn-remove"
@@ -14,106 +17,26 @@ const Overlay = () => {
         </h2>
 
         <div className="overlay__cart-Items">
-          <div className="overlay__cart-Item">
-            <img
-              width={70}
-              height={70}
-              src="img/sneakers/sneaker1.png"
-              alt="overlayimg"
-              className="overlay__img"
-            />
-            <div className="overlay__desc">
-              <p className="overlay__text">
-                Мужские Кроссовки Nike Air Max 270
-              </p>
-              <b className="overlay__b">12 999 руб.</b>
+          {cartItems.map((item) => (
+            <div className="overlay__cart-Item" key={item.id}>
+              <img
+                width={70}
+                height={70}
+                src={item.imageUrl}
+                alt="overlayimg"
+                className="overlay__img"
+              />
+              <div className="overlay__desc">
+                <p className="overlay__text">{item.title}</p>
+                <b className="overlay__b">{item.price} руб.</b>
+              </div>
+              <img
+                className="overlay__btn-remove removeBtn"
+                src="img/btn-remove.svg"
+                alt="Btn-remove"
+              />
             </div>
-            <img
-              className="overlay__btn-remove removeBtn"
-              src="img/btn-remove.svg"
-              alt="Btn-remove"
-            />
-          </div>
-          <div className="overlay__cart-Item">
-            <img
-              width={70}
-              height={70}
-              src="img/sneakers/sneaker1.png"
-              alt="overlayimg"
-              className="overlay__img"
-            />
-            <div className="overlay__desc">
-              <p className="overlay__text">
-                Мужские Кроссовки Nike Air Max 270
-              </p>
-              <b className="overlay__b">12 999 руб.</b>
-            </div>
-            <img
-              className="overlay__btn-remove removeBtn"
-              src="img/btn-remove.svg"
-              alt="Btn-remove"
-            />
-          </div>
-          <div className="overlay__cart-Item">
-            <img
-              width={70}
-              height={70}
-              src="img/sneakers/sneaker1.png"
-              alt="overlayimg"
-              className="overlay__img"
-            />
-            <div className="overlay__desc">
-              <p className="overlay__text">
-                Мужские Кроссовки Nike Air Max 270
-              </p>
-              <b className="overlay__b">12 999 руб.</b>
-            </div>
-            <img
-              className="overlay__btn-remove removeBtn"
-              src="img/btn-remove.svg"
-              alt="Btn-remove"
-            />
-          </div>
-          <div className="overlay__cart-Item">
-            <img
-              width={70}
-              height={70}
-              src="img/sneakers/sneaker1.png"
-              alt="overlayimg"
-              className="overlay__img"
-            />
-            <div className="overlay__desc">
-              <p className="overlay__text">
-                Мужские Кроссовки Nike Air Max 270
-              </p>
-              <b className="overlay__b">12 999 руб.</b>
-            </div>
-            <img
-              className="overlay__btn-remove removeBtn"
-              src="img/btn-remove.svg"
-              alt="Btn-remove"
-            />
-          </div>
-          <div className="overlay__cart-Item">
-            <img
-              width={70}
-              height={70}
-              src="img/sneakers/sneaker1.png"
-              alt="overlayimg"
-              className="overlay__img"
-            />
-            <div className="overlay__desc">
-              <p className="overlay__text">
-                Мужские Кроссовки Nike Air Max 270
-              </p>
-              <b className="overlay__b">12 999 руб.</b>
-            </div>
-            <img
-              className="overlay__btn-remove removeBtn"
-              src="img/btn-remove.svg"
-              alt="Btn-remove"
-            />
-          </div>
+          ))}
         </div>
 
         <ul className="overlay__list">

@@ -1,13 +1,40 @@
-import CardItem from './components/CardItem'
+import { useEffect, useState } from 'react'
+import CardItem from './components/card/CardItem'
 import Header from './components/Header'
 import Overlay from './components/Overlay'
 
 function App() {
+  const [items, setItems] = useState([])
+  const [cartItems, setCartItems] = useState([])
+
+  const [cartOpened, setCartOpened] = useState(false)
+
+  useEffect(() => {
+    fetch('https://63b53e489f50390584c427eb.mockapi.io/items')
+      .then((res) => res.json())
+      .then((json) => setItems(json))
+  }, [])
+
+  const onAddtoCartHandler = (obj) => {
+    // setCartItems([...cartItems, obj])
+    setCartItems((prev) => [...prev, obj])
+
+    /* можно сделать  проверку, если мы уже добавляли такой объект мы его снова не добавляем */
+    /* также добавить удаление */
+  }
+
   return (
     <div className="App">
       <div className="container">
-        <Overlay />
-        <Header />
+        {cartOpened && (
+          <Overlay
+            cartItems={cartItems}
+            onClickCart={() => setCartOpened(!cartOpened)}
+          />
+        )}
+
+        <Header onClickCart={() => setCartOpened(!cartOpened)} />
+
         <footer className="footer">
           <div className="footer__search-block">
             <h1 className="footer__title">Все кроссовки</h1>
@@ -22,72 +49,20 @@ function App() {
           </div>
 
           <div className="grid">
-            <CardItem />
-            <div className="grid__item">
-              <img
-                width={133}
-                height={112}
-                src="/img/sneakers/sneaker2.png"
-                alt="sneaker1"
+            {items.map((item) => (
+              <CardItem
+                key={item.id}
+                title={item.title}
+                price={item.price}
+                imageUrl={item.imageUrl}
+                onFavorite={() => console.log('добавили в закладки')}
+                onPlus={() => onAddtoCartHandler(item)}
               />
-              <p className="grid__text">
-                Мужские Кроссовки Nike Blazer Mid Suede
-              </p>
-              <div className="grid__bottom">
-                <div className="grid__price">
-                  <span className="grid__span">Цена:</span>
-                  <b className="grid__b">12 999 руб.</b>
-                </div>
-                <button className="grid__btn">
-                  <img width={11} height={11} src="img/plus.svg" alt="plus" />
-                </button>
-              </div>
-            </div>
-            <div className="grid__item">
-              <img
-                width={133}
-                height={112}
-                src="/img/sneakers/sneaker3.jpg"
-                alt="sneaker1"
-              />
-              <p className="grid__text">
-                Мужские Кроссовки Nike Blazer Mid Suede
-              </p>
-              <div className="grid__bottom">
-                <div className="grid__price">
-                  <span className="grid__span">Цена:</span>
-                  <b className="grid__b">12 999 руб.</b>
-                </div>
-                <button className="grid__btn">
-                  <img width={11} height={11} src="img/plus.svg" alt="plus" />
-                </button>
-              </div>
-            </div>
-            <div className="grid__item">
-              <img
-                width={133}
-                height={112}
-                src="/img/sneakers/sneaker4.jpg"
-                alt="sneaker1"
-              />
-              <p className="grid__text">
-                Мужские Кроссовки Nike Blazer Mid Suede
-              </p>
-              <div className="grid__bottom">
-                <div className="grid__price">
-                  <span className="grid__span">Цена:</span>
-                  <b className="grid__b">12 999 руб.</b>
-                </div>
-                <button className="grid__btn">
-                  <img width={11} height={11} src="img/plus.svg" alt="plus" />
-                </button>
-              </div>
-            </div>
+            ))}
           </div>
         </footer>
       </div>
     </div>
   )
 }
-
 export default App

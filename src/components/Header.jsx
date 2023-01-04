@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Header = () => {
+const Header = ({ onClickCart }) => {
   return (
     <header className="header">
       <div className="header__info">
@@ -19,7 +19,7 @@ const Header = () => {
 
       <nav className="header__nav">
         <ul className="header__list">
-          <li className="header__item">
+          <li onClick={onClickCart} className="header__item">
             <img width={18} height={18} src="img/card.svg" alt="card logo" />
             <span className="header__span">1205 руб.</span>
           </li>
