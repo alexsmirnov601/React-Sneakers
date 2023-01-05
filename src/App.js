@@ -3,10 +3,12 @@ import CardItem from './components/card/CardItem'
 import Header from './components/Header'
 import Overlay from './components/Overlay'
 
+/* мне нужно написать здесь функцию, которая бы меняла состояние isAdded  и передать ее в комопнент Overlay (также не забыть про CardItem)*/
+
 function App() {
+  const [inputValue, setInputValue] = useState('')
   const [items, setItems] = useState([])
   const [cartItems, setCartItems] = useState([])
-
   const [cartOpened, setCartOpened] = useState(false)
 
   useEffect(() => {
@@ -16,18 +18,32 @@ function App() {
   }, [])
 
   const onAddtoCartHandler = (obj) => {
-    // setCartItems([...cartItems, obj])
-    setCartItems((prev) => [...prev, obj])
+    /*   проверку, если мы уже добавляли такой объект мы его снова не добавляем */
+    if (cartItems.includes(obj)) {
+      return null
+    }
 
-    /* можно сделать  проверку, если мы уже добавляли такой объект мы его снова не добавляем */
-    /* также добавить удаление */
+    setCartItems((prev) => [...prev, obj])
+    // второй вариант - setCartItems([...cartItems, obj])
   }
+
+  /* удвление товаров из корзины (если удаляется отсюда то меняем setIsAdded(false)) */
+  const deletefromCartHandler = (id) => {
+    setCartItems(cartItems.filter((cartItem) => cartItem.id !== id))
+    // setIsAdded(!isAdded)
+  }
+
+  /* функция для поиска */
+  const searchItemsHandler = items.filter((item) => {
+    return item.title.toLowerCase().includes(inputValue.toLowerCase())
+  })
 
   return (
     <div className="App">
       <div className="container">
         {cartOpened && (
           <Overlay
+            deleteFromCart={deletefromCartHandler}
             cartItems={cartItems}
             onClickCart={() => setCartOpened(!cartOpened)}
           />
@@ -41,6 +57,8 @@ function App() {
             <div className="form">
               <img className="form__img" src="/img/search.svg" alt="Search" />
               <input
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
                 className="form__input"
                 type="search"
                 placeholder="Поиск..."
@@ -49,8 +67,10 @@ function App() {
           </div>
 
           <div className="grid">
-            {items.map((item) => (
+            {searchItemsHandler.map((item) => (
               <CardItem
+                // isAdded={isAdded}
+                // setIsAdded={setIsAdded}
                 key={item.id}
                 title={item.title}
                 price={item.price}

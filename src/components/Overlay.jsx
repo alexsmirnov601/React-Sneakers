@@ -1,8 +1,6 @@
 // style={{ display: 'none' }}
 
-const Overlay = ({ onClickCart, cartItems = [] }) => {
-  console.log(cartItems)
-
+const Overlay = ({ onClickCart, cartItems = [], deleteFromCart }) => {
   return (
     <div className="overlay">
       <div className="overlay__right-side">
@@ -31,6 +29,7 @@ const Overlay = ({ onClickCart, cartItems = [] }) => {
                 <b className="overlay__b">{item.price} руб.</b>
               </div>
               <img
+                onClick={() => deleteFromCart(item.id)}
                 className="overlay__btn-remove removeBtn"
                 src="img/btn-remove.svg"
                 alt="Btn-remove"
