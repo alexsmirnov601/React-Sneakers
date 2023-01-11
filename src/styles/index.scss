@@ -79,66 +79,6 @@ body {
   padding-top: 40px;
   padding-bottom: 157px;
 }
-/* здесь был grid */
-// .grid {
-//   display: grid;
-//   grid-template-columns: repeat(4, 1fr);
-//   gap: 40px;
-//   padding-top: 40px;
-//   padding-bottom: 157px;
-
-//   &__favorite {
-//     position: absolute;
-//     cursor: pointer;
-//   }
-
-//   &__item {
-//     height: 260px;
-//     padding: 30px;
-//     border-radius: 40px;
-//     border: 1px solid #f3f3f3;
-//     transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
-//   }
-//   &__item:hover {
-//     box-shadow: 0px 20px 35px rgba(0, 0, 0, 0.06);
-//     transform: translateY(-5px);
-//   }
-//   &__text {
-//     font-size: 14px;
-//     font-weight: 400;
-//     margin: 14px 0;
-//   }
-//   &__bottom {
-//     display: flex;
-//     align-items: center;
-//   }
-//   &__price {
-//     display: flex;
-//     flex-direction: column;
-//   }
-//   &__btn {
-//     border-radius: 8px;
-//     border: 1px solid #f2f2f2;
-//     background: #ffffff;
-//     margin-left: 39px;
-//     height: 32px;
-//     width: 32px;
-//     cursor: pointer;
-//   }
-//   &__span {
-//     opacity: 0.5;
-//     text-transform: uppercase;
-//     font-weight: 500;
-//     font-size: 12px;
-
-//     margin-bottom: 2px;
-//   }
-//   &__b {
-//     font-weight: 700;
-//     font-size: 14px;
-//   }
-// }
-
 .form {
   display: flex;
   border: 1px solid #f3f3f3;
@@ -211,14 +151,6 @@ body {
     font-size: 14px;
     font-weight: 700;
   }
-  // &__btn-remove {
-  //   // opacity: 0.5;
-  //   // cursor: pointer;
-  //   // transform: opacity 0.15s ease-in-out;
-  //   // &:hover {
-  //   //   opacity: 1;
-  //   // }
-  // }
   &__list {
     margin-bottom: 20px;
     div {
@@ -243,6 +175,41 @@ body {
       position: absolute;
       right: 30px;
       top: 20px;
+      transition: transform 0.15s ease-in-out;
+      &:hover {
+        transform: translateX(5px);
+      }
+    }
+    transition: background 0.1s ease-in-out;
+    &:hover {
+      background: lighten($color: #9dd558, $amount: 5%);
+    }
+    &:active {
+      background: darken($color: #9dd558, $amount: 5%);
+    }
+  }
+  &__emptyCartImg {
+    padding-top: 309px;
+    margin: 0 auto;
+  }
+  &__emptyTitle {
+    font-size: 24px;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+  }
+  &__emptyText {
+    padding-top: 9px;
+    padding-bottom: 40px;
+    font-weight: 400;
+    font-size: 16px;
+    opacity: 0.4;
+    text-align: center;
+  }
+  &__emptyBtn {
+    img {
+      position: absolute;
+      left: 30px;
       transition: transform 0.15s ease-in-out;
       &:hover {
         transform: translateX(5px);

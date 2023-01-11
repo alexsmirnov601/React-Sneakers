@@ -1,16 +1,19 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Header = ({ onClickCart }) => {
   return (
     <header className="header">
       <div className="header__info">
-        <img
-          className="header__logo"
-          width={40}
-          height={40}
-          src="/img/logo.png"
-          alt="sneaker logo"
-        />
+        <Link to="/">
+          <img
+            className="header__logo"
+            width={40}
+            height={40}
+            src="/img/logo.png"
+            alt="sneaker logo"
+          />
+        </Link>
         <div className="header__description">
           <h3 className="header__title">React Sneakers</h3>
           <p className="header__text">Магазин лучших кроссовок</p>
@@ -24,7 +27,9 @@ const Header = ({ onClickCart }) => {
             <span className="header__span">1205 руб.</span>
           </li>
           <li className="header__item">
-            <img src="img/heart-logo.svg" alt="heart-logo" />
+            <Link to="favorites">
+              <img src="img/heart-logo.svg" alt="heart-logo" />
+            </Link>
           </li>
           <li className="header__item">
             <img src="img/user.svg" alt="user logo" />
