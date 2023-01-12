@@ -1,6 +1,8 @@
+// import { createContext } from 'react'
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import axios from 'axios'
+import AppContext from './context'
 import Header from './components/Header'
 import Overlay from './components/Overlay'
 import Home from './pages/Home'
@@ -12,35 +14,50 @@ function App() {
   const [favorites, setFavorites] = useState([])
   const [inputValue, setInputValue] = useState('')
   const [cartOpened, setCartOpened] = useState(false)
+  const [itemsIsLoading, setItemsIsLoading] = useState(true)
 
   // console.log(cartItems)
 
   useEffect(() => {
-    axios
-      .get('https://63b53e489f50390584c427eb.mockapi.io/items')
-      .then((res) => setItems(res.data))
-    /* вытаскиваем товары для корзины с бэка */
+    async function fetchData() {
+      /* вытаскиваем товары для корзины с бэка */
+      const cartResponse = await axios.get(
+        'https://63b53e489f50390584c427eb.mockapi.io/cart'
+      )
 
-    axios
-      .get('https://63b53e489f50390584c427eb.mockapi.io/cart')
-      .then((res) => setCartItems(res.data))
+      const favoritesResponse = await axios.get(
+        'https://63b53e489f50390584c427eb.mockapi.io/favorites'
+      )
 
-    axios
-      .get('https://63b53e489f50390584c427eb.mockapi.io/favorites')
-      .then((res) => setFavorites(res.data))
+      const itemsResponse = await axios.get(
+        'https://63b53e489f50390584c427eb.mockapi.io/items'
+      )
+
+      setItemsIsLoading(false)
+
+      setCartItems(cartResponse.data)
+      setFavorites(favoritesResponse.data)
+      setItems(itemsResponse.data)
+    }
+    fetchData()
   }, [])
 
   const onAddtoCartHandler = (obj) => {
+    console.log(obj)
+
+    if (cartItems.find((item) => Number(item.id) === Number(obj.id))) {
+      axios.delete(`https://63b53e489f50390584c427eb.mockapi.io/cart/${obj.id}`)
+      setCartItems((prev) =>
+        prev.filter((item) => Number(item.id) !== Number(obj.id))
+      )
+    }
+
     /* передаме объект на бэк */
     axios.post('https://63b53e489f50390584c427eb.mockapi.io/cart', obj)
+    // .then()
 
     setCartItems((prev) => [...prev, obj])
     // второй вариант - setCartItems([...cartItems, obj])
-
-    // /*   проверку, если мы уже добавляли такой объект мы его снова не добавляем */
-    if (cartItems.includes(obj)) {
-      return null
-    }
   }
 
   const onAddtoFavoriteHandler = async (obj) => {
@@ -76,46 +93,51 @@ function App() {
   })
 
   return (
-    <BrowserRouter>
-      <div className="App">
-        <div className="container">
-          {cartOpened && (
-            <Overlay
-              deleteFromCart={deletefromCartHandler}
-              cartItems={cartItems}
-              onClickCart={() => setCartOpened(!cartOpened)}
-            />
-          )}
+    <AppContext.Provider value={{ items, cartItems, favorites }}>
+      <BrowserRouter>
+        <div className="App">
+          <div className="container">
+            {cartOpened && (
+              <Overlay
+                deleteFromCart={deletefromCartHandler}
+                cartItems={cartItems}
+                onClickCart={() => setCartOpened(!cartOpened)}
+              />
+            )}
 
-          <Header onClickCart={() => setCartOpened(!cartOpened)} />
-          {/* роутинг */}
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Home
-                  inputValue={inputValue}
-                  setInputValue={setInputValue}
-                  searchItemsHandler={searchItemsHandler}
-                  onAddtoFavoriteHandler={onAddtoFavoriteHandler}
-                  onAddtoCartHandler={onAddtoCartHandler}
-                />
-              }
-            ></Route>
-            <Route
-              path="favorites"
-              element={
-                <Favorites
-                  items={favorites}
-                  onAddtoFavoriteHandler={onAddtoFavoriteHandler}
-                />
-              }
-            ></Route>
-          </Routes>
-          {/* роутинг */}
+            <Header onClickCart={() => setCartOpened(!cartOpened)} />
+            {/* роутинг */}
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <Home
+                    items={items}
+                    cartItems={cartItems}
+                    inputValue={inputValue}
+                    setInputValue={setInputValue}
+                    searchItemsHandler={searchItemsHandler}
+                    onAddtoFavoriteHandler={onAddtoFavoriteHandler}
+                    onAddtoCartHandler={onAddtoCartHandler}
+                    itemsIsLoading={itemsIsLoading}
+                  />
+                }
+              ></Route>
+              <Route
+                path="favorites"
+                element={
+                  <Favorites
+                    // items={favorites}
+                    onAddtoFavoriteHandler={onAddtoFavoriteHandler}
+                  />
+                }
+              ></Route>
+            </Routes>
+            {/* роутинг */}
+          </div>
         </div>
-      </div>
-    </BrowserRouter>
+      </BrowserRouter>
+    </AppContext.Provider>
   )
 }
 export default App
