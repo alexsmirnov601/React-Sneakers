@@ -1,4 +1,6 @@
 import CardItem from '../components/card/CardItem'
+import { useContext } from 'react'
+import AppContext from '../context'
 
 const Home = ({
   items,
@@ -10,6 +12,8 @@ const Home = ({
   onAddtoCartHandler,
   itemsIsLoading,
 }) => {
+  const { isItemAdded } = useContext(AppContext)
+
   const renderItems = () => {
     return (itemsIsLoading ? [...Array(12)] : searchItemsHandler).map(
       (item, index) => (
@@ -17,10 +21,8 @@ const Home = ({
           key={index}
           onFavorite={() => onAddtoFavoriteHandler(item)}
           onPlus={() => onAddtoCartHandler(item)}
-          addedToCart={cartItems.some(
-            (obj) => Number(obj.id) === Number(item.id)
-          )}
           loading={itemsIsLoading}
+          added={isItemAdded(item && item.id)}
           {...item}
         />
       )

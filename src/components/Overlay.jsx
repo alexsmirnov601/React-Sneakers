@@ -1,7 +1,17 @@
-import OverlayEmptyCart from './OverlayEmptyCart'
+import { useState } from 'react'
+import { useCart } from '../hooks/useCart'
+import Info from './Info'
 
-const Overlay = ({ onClickCart, cartItems = [], deleteFromCart }) => {
-  // console.log(cartItems)
+const Overlay = ({ onClickCart, deleteFromCart }) => {
+  const [isOrderComplete, setIsOrderComplete] = useState(false)
+  /* кастомный хук */
+  const { cartItems, setCartItems, totalPrice } = useCart()
+
+  const onClickOrder = () => {
+    setIsOrderComplete(true)
+    setCartItems([])
+  }
+
   return (
     <div>
       {cartItems.length > 0 ? (
@@ -16,7 +26,6 @@ const Overlay = ({ onClickCart, cartItems = [], deleteFromCart }) => {
                 alt="Btn-remove"
               />
             </h2>
-
             <div className="overlay__cart-Items">
               {cartItems.map((item, index) => (
                 <div className="overlay__cart-Item" key={index}>
@@ -45,22 +54,34 @@ const Overlay = ({ onClickCart, cartItems = [], deleteFromCart }) => {
               <li className="overlay__item">
                 <span className="overlay__list-text">Итого:</span>
                 <div></div>
-                <b className="overlay__b">21 498 руб.</b>
+                <b className="overlay__b">{totalPrice} руб.</b>
               </li>
               <li className="overlay__item">
                 <span className="overlay__list-text">Налог 5%:</span>
                 <div></div>
-                <b className="overlay__b">1074 руб.</b>
+                <b className="overlay__b">
+                  {Math.ceil(totalPrice * 0.05)} руб.
+                </b>
               </li>
             </ul>
-            <button className="overlay__btn greenBtn">
+            <button onClick={onClickOrder} className="overlay__btn greenBtn">
               Оформить заказ
               <img src="img/arrow.svg" alt="Arrow" />
             </button>
           </div>
         </div>
       ) : (
-        <OverlayEmptyCart onClickCart={onClickCart} />
+        <Info
+          title={isOrderComplete ? 'Заказ оформлен!' : 'Корзина пустая'}
+          description={
+            isOrderComplete
+              ? 'Ваш заказ # скоро будет передан курьерской доставке'
+              : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'
+          }
+          image={
+            isOrderComplete ? 'img/complete-order.png' : 'img/empty-cart.jpg'
+          }
+        />
       )}
     </div>
   )
