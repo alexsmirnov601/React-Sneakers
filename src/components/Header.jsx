@@ -2,8 +2,6 @@ import { Link } from 'react-router-dom'
 import { useCart } from '../hooks/useCart'
 
 const Header = ({ onClickCart }) => {
-  //
-
   const { totalPrice } = useCart()
 
   return (
@@ -19,25 +17,25 @@ const Header = ({ onClickCart }) => {
           />
         </Link>
         <div className="header__description">
-          <h3 className="header__title">React Sneakers</h3>
-          <p className="header__text">Магазин лучших кроссовок</p>
+          <h3 className="header__title">Sneaker Shop</h3>
+          <p className="header__text">Лучшие кроссовки в городе</p>
         </div>
       </div>
 
       <nav className="header__nav">
         <ul className="header__list">
           <li onClick={onClickCart} className="header__item">
-            <img width={18} height={18} src="img/card.svg" alt="card logo" />
+            <img width={18} height={18} src="img/cart.svg" alt="Корзина" />
             <span className="header__span">{totalPrice} руб.</span>
           </li>
           <li className="header__item">
             <Link to="favorites">
-              <img src="img/heart-logo.svg" alt="heart-logo" />
+              <img src="img/heart-logo.svg" alt="Закладки" />
             </Link>
           </li>
           <li className="header__item">
             <Link to="orders">
-              <img src="img/user.svg" alt="user logo" />
+              <img src="img/user.svg" alt="Пользователь" />
             </Link>
           </li>
         </ul>

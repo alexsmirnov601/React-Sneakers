@@ -16,15 +16,19 @@ function App() {
   const [cartOpened, setCartOpened] = useState(false)
   const [itemsIsLoading, setItemsIsLoading] = useState(true)
 
+  const ITEMS_URL = 'https://sneakers-server-2hes.onrender.com/items'
+  const CART_URL = 'https://sneakers-server-2hes.onrender.com/cart'
+  const FAVORITES_URL = 'https://sneakers-server-2hes.onrender.com/favorites'
+
   useEffect(() => {
-    async function fetchData() {
+    ;(async () => {
       try {
         /* вытаскиваем товары для корзины с бэка */
         const [cartResponse, favoritesResponse, itemsResponse] =
           await Promise.all([
-            axios.get('https://63b53e489f50390584c427eb.mockapi.io/cart'),
-            axios.get('https://63b53e489f50390584c427eb.mockapi.io/favorites'),
-            axios.get('https://63b53e489f50390584c427eb.mockapi.io/items'),
+            axios.get(CART_URL),
+            axios.get(FAVORITES_URL),
+            axios.get(ITEMS_URL),
           ])
 
         setItemsIsLoading(false)
@@ -35,51 +39,34 @@ function App() {
         alert('Ошибка при запросе данных!')
         console.error(error)
       }
-    }
-    fetchData()
+    })()
   }, [])
 
-  const onAddtoCartHandler = (obj) => {
+  const onAddtoCartHandler = async (obj) => {
     try {
-      if (cartItems.find((item) => Number(item.id) === Number(obj.id))) {
-        axios.delete(
-          `https://63b53e489f50390584c427eb.mockapi.io/cart/${obj.id}`
-        )
-        setCartItems((prev) =>
-          prev.filter((item) => Number(item.id) !== Number(obj.id))
-        )
+      // Проверяем, есть ли товар с таким же id в массиве
+      if (cartItems.some((item) => item.id === obj.id)) {
+        setCartItems((prev) => prev.filter((item) => item.id !== obj.id))
+        await axios.delete(`${CART_URL}/${obj.id}`)
+      } else {
+        /* передаме объект на бэк корзины */
+        setCartItems((prev) => [...prev, obj])
+        await axios.post(CART_URL, obj)
       }
-      // await axios.delete('https://63b53e489f50390584c427eb.mockapi.io/cart/')
-
-      /* передаме объект на бэк */
-      axios.post('https://63b53e489f50390584c427eb.mockapi.io/cart', obj)
-      // .then()
-
-      setCartItems((prev) => [...prev, obj])
-      // второй вариант - setCartItems([...cartItems, obj])
     } catch (error) {
       alert('Ошибка при добавлении в корзину!')
       console.error(error)
     }
   }
 
-  const onAddtoFavoriteHandler = async (obj) => {
+  const onAddtoFavoriteHandler = (obj) => {
     try {
-      if (favorites.find((favObj) => Number(favObj.id) === Number(obj.id))) {
-        axios.delete(
-          `https://63b53e489f50390584c427eb.mockapi.io/favorites/${obj.id}`
-        )
-        setFavorites((prev) =>
-          prev.filter((item) => Number(item.id) !== Number(obj.id))
-        )
+      if (favorites.some((favObj) => favObj.id === obj.id)) {
+        axios.delete(`${FAVORITES_URL}/${obj.id}`)
+        setFavorites((prev) => prev.filter((item) => item.id !== obj.id))
       } else {
-        /* ждем ответ от бэка и только потом обновляем состояние */
-        const { data } = await axios.post(
-          'https://63b53e489f50390584c427eb.mockapi.io/favorites',
-          obj
-        )
-
-        setFavorites((prev) => [...prev, data])
+        axios.post(FAVORITES_URL, obj)
+        setFavorites((prev) => [...prev, obj])
       }
     } catch (error) {
       alert('не удалось добавить в избранные')
@@ -89,9 +76,8 @@ function App() {
 
   const deletefromCartHandler = (id) => {
     try {
-      axios.delete(`https://63b53e489f50390584c427eb.mockapi.io/cart/${id}`)
+      axios.delete(`${CART_URL}/${id}`)
       setCartItems((prev) => prev.filter((item) => item.id !== id))
-      // setCartItems(cartItems.filter((cartItem) => cartItem.id !== id))
     } catch (error) {
       alert('Ошибка при удалении из корзины')
       console.error(error)
@@ -103,9 +89,8 @@ function App() {
     return item.title.toLowerCase().includes(inputValue.toLowerCase())
   })
 
-  /* если хотя бы олин id, который тебе передали, он есть в корзине среди объектов - выдывай мне true (иначе false)  */
   const isItemAdded = (id) => {
-    cartItems.some((obj) => Number(obj.id) === Number(id))
+    return cartItems.some((obj) => obj.id === id)
   }
 
   return (
@@ -116,6 +101,7 @@ function App() {
         favorites,
         isItemAdded,
         onAddtoFavoriteHandler,
+        onAddtoCartHandler,
         setCartItems,
         setCartOpened,
       }}

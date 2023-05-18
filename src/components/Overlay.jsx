@@ -1,19 +1,40 @@
+import axios from 'axios'
 import { useState } from 'react'
 import { useCart } from '../hooks/useCart'
 import Info from './Info'
 
 const Overlay = ({ onClickCart, deleteFromCart }) => {
-  const [isOrderComplete, setIsOrderComplete] = useState(false)
   /* кастомный хук */
   const { cartItems, setCartItems, totalPrice } = useCart()
+  const [isOrderComplete, setIsOrderComplete] = useState(false)
+  const [orderId, setOrderId] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const onClickOrder = () => {
-    setIsOrderComplete(true)
-    setCartItems([])
+  const onClickOrder = async () => {
+    try {
+      setIsLoading(true)
+      // загружаем на сервер товары из корзины
+      const { data } = await axios.post(
+        'https://sneakers-server-2hes.onrender.com/orders',
+        {
+          items: cartItems,
+        }
+      )
+      setOrderId(data.id)
+      setIsOrderComplete(true)
+      // удаляем все элементы, которые есть в корзине c сервера
+      cartItems.map((obj) => {
+        axios.delete(`https://sneakers-server-2hes.onrender.com/cart/${obj.id}`)
+      })
+      // отчищаем локально
+      setCartItems([])
+    } catch (error) {
+      alert('Ошибка при создании заказа :(')
+    }
+    setIsLoading(false)
   }
-
   return (
-    <div>
+    <>
       {cartItems.length > 0 ? (
         <div className="overlay">
           <div className="overlay__right-side">
@@ -27,8 +48,8 @@ const Overlay = ({ onClickCart, deleteFromCart }) => {
               />
             </h2>
             <div className="overlay__cart-Items">
-              {cartItems.map((item, index) => (
-                <div className="overlay__cart-Item" key={index}>
+              {cartItems.map((item) => (
+                <div className="overlay__cart-Item" key={item.id}>
                   <img
                     width={70}
                     height={70}
@@ -64,7 +85,11 @@ const Overlay = ({ onClickCart, deleteFromCart }) => {
                 </b>
               </li>
             </ul>
-            <button onClick={onClickOrder} className="overlay__btn greenBtn">
+            <button
+              disabled={isLoading}
+              onClick={onClickOrder}
+              className="overlay__btn greenBtn"
+            >
               Оформить заказ
               <img src="img/arrow.svg" alt="Arrow" />
             </button>
@@ -75,7 +100,7 @@ const Overlay = ({ onClickCart, deleteFromCart }) => {
           title={isOrderComplete ? 'Заказ оформлен!' : 'Корзина пустая'}
           description={
             isOrderComplete
-              ? 'Ваш заказ # скоро будет передан курьерской доставке'
+              ? `Ваш заказ №${orderId} скоро будет передан курьерской доставке`
               : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'
           }
           image={
@@ -83,7 +108,7 @@ const Overlay = ({ onClickCart, deleteFromCart }) => {
           }
         />
       )}
-    </div>
+    </>
   )
 }
 

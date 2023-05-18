@@ -15,7 +15,6 @@ const CardItem = ({
   loading = false,
   added = false,
 }) => {
-  console.log(title, added)
   const { isItemAdded } = useContext(AppContext)
 
   /* состояние для изменения картинки */
@@ -52,32 +51,38 @@ const CardItem = ({
           </ContentLoader>
         ) : (
           <>
-            <div className={styles.grid__favorite}>
-              <img
-                onClick={onClickFavorite}
-                src={
-                  isFavorite ? '/img/heart-liked.svg' : '/img/heart-unliked.svg'
-                }
-                alt="Unliked"
-              />
-            </div>
-            <img width="100%" height={135} src={imageUrl} alt="sneaker1" />
+            {onFavorite && (
+              <div className={styles.grid__favorite}>
+                <img
+                  onClick={onClickFavorite}
+                  src={
+                    isFavorite
+                      ? '/img/heart-liked.svg'
+                      : '/img/heart-unliked.svg'
+                  }
+                  alt="Unliked"
+                />
+              </div>
+            )}
+            <img width="100%" height={135} src={imageUrl} alt="sneaker" />
             <p className={styles.grid__text}>{title}</p>
             <div className={styles.grid__bottom}>
               <div className={styles.grid__price}>
                 <span className={styles.grid__span}>Цена:</span>
                 <b className={styles.grid__b}>{price} руб.</b>
               </div>
-              <img
-                width={40}
-                height={40}
-                onClick={onClickPlus}
-                className={styles.grid__plusBtn}
-                src={
-                  isItemAdded(id) ? 'img/btn-checked.svg' : 'img/btn-plus.svg'
-                }
-                alt="plus"
-              />
+              {onPlus && (
+                <img
+                  className={styles.grid__plusBtn}
+                  width={40}
+                  height={40}
+                  onClick={onClickPlus}
+                  src={
+                    isItemAdded(id) ? 'img/btn-checked.svg' : 'img/btn-plus.svg'
+                  }
+                  alt="plus"
+                />
+              )}
             </div>
           </>
         )}
