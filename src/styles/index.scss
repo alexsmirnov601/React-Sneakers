@@ -18,6 +18,46 @@ body {
   background: #ffffff;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.04);
   border-radius: 20px;
+  @media screen and (max-width: 1200px) {
+    & {
+      max-width: 900px;
+    }
+  }
+  @media screen and (max-width: 1025px) {
+    & {
+      max-width: 800px;
+    }
+  }
+  @media screen and (max-width: 900px) {
+    & {
+      max-width: 700px;
+    }
+  }
+  @media screen and (max-width: 800px) {
+    & {
+      max-width: 600px;
+    }
+  }
+  @media screen and (max-width: 670px) {
+    & {
+      max-width: 570px;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    & {
+      max-width: 510px;
+    }
+  }
+  @media screen and (max-width: 540px) {
+    & {
+      max-width: 420px;
+    }
+  }
+  @media screen and (max-width: 450px) {
+    & {
+      max-width: 360px;
+    }
+  }
 }
 
 /* ----- header----------------- */
@@ -27,10 +67,19 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+  }
   &__info {
     display: flex;
     align-items: center;
   }
+  @media screen and (max-width: 600px) {
+    &__info {
+      margin-bottom: 10px;
+    }
+  }
+
   &__description {
     margin-left: 16px;
   }
@@ -70,6 +119,11 @@ body {
     justify-content: space-between;
     align-items: center;
   }
+  @media screen and (max-width: 670px) {
+    &__search-block {
+      flex-direction: column;
+    }
+  }
 }
 
 .grid {
@@ -78,12 +132,41 @@ body {
   gap: 40px;
   padding-top: 40px;
   padding-bottom: 157px;
+
+  @media screen and (max-width: 1200px) {
+    & {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media screen and (max-width: 1025px) {
+    & {
+      gap: 20px;
+    }
+  }
+  @media screen and (max-width: 900px) {
+    & {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media screen and (max-width: 600px) {
+    & {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
 }
 .form {
   display: flex;
   border: 1px solid #f3f3f3;
   border-radius: 10px;
   padding: 0 15px;
+  @media screen and (max-width: 670px) {
+    & {
+      margin-top: 10px;
+    }
+  }
+  &__img {
+    background-repeat: no-repeat;
+  }
   &__input {
     border: none;
     width: 200px;
@@ -91,6 +174,7 @@ body {
     padding: 13px;
     font-size: 16px;
   }
+
   &__input:focus {
     outline: none;
   }
@@ -270,9 +354,14 @@ body {
 /* Empty component */
 .empty {
   margin: 0 auto;
-  padding: 240px;
+  padding-top: 240px;
+  padding-bottom: 240px;
   width: 290px;
   height: 278px;
+  @media screen and (max-width: 700px) {
+    padding-top: 120px;
+    padding-bottom: 120px;
+  }
   &__button {
     width: 100%;
   }

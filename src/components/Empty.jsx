@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Empty = ({ title, text, img }) => {
   return (
@@ -7,10 +8,12 @@ const Empty = ({ title, text, img }) => {
       <h1 className="empty__heading">{title}</h1>
       <p className="empty__text">{text}</p>
 
-      <button className="empty__button overlay__emptyBtn greenBtn">
-        <img src="img/back-arrow.svg" alt="backArrow" />
-        Вернуться назад
-      </button>
+      <Link to="/">
+        <button className="empty__button overlay__emptyBtn greenBtn">
+          <img src="img/back-arrow.svg" alt="backArrow" />
+          Вернуться назад
+        </button>
+      </Link>
     </div>
   )
 }

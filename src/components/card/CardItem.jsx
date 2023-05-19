@@ -64,7 +64,7 @@ const CardItem = ({
                 />
               </div>
             )}
-            <img width="100%" height={135} src={imageUrl} alt="sneaker" />
+            <img width={158} height={135} src={imageUrl} alt="sneaker" />
             <p className={styles.grid__text}>{title}</p>
             <div className={styles.grid__bottom}>
               <div className={styles.grid__price}>
