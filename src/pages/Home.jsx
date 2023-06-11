@@ -1,24 +1,7 @@
 import CardItem from '../components/card/CardItem'
 import { useContext } from 'react'
 import AppContext from '../context'
-
-const testArray = [
-  { id: 20 },
-  { id: 21 },
-  { id: 22 },
-  { id: 23 },
-  { id: 24 },
-  { id: 25 },
-  { id: 26 },
-  { id: 27 },
-  { id: 28 },
-  { id: 29 },
-  { id: 30 },
-  { id: 31 },
-]
-
-/* было так */
-// [...Array(12)]
+import { fakeArray } from '../utils/fakeArray'
 
 const Home = ({
   inputValue,
@@ -31,7 +14,7 @@ const Home = ({
   const { isItemAdded } = useContext(AppContext)
 
   const renderItems = () => {
-    return (itemsIsLoading ? testArray : searchItemsHandler).map(
+    return (itemsIsLoading ? fakeArray : searchItemsHandler).map(
       (item, index) => (
         <CardItem
           key={item.id}

@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { useState } from 'react'
 import { useCart } from '../hooks/useCart'
-import Info from './Info'
+import Info from '../components/Info'
+import { urls } from '../utils/urls'
 
 const Overlay = ({ onClickCart, deleteFromCart }) => {
   /* кастомный хук */
@@ -14,18 +15,13 @@ const Overlay = ({ onClickCart, deleteFromCart }) => {
     try {
       setIsLoading(true)
       // загружаем на сервер товары из корзины
-      const { data } = await axios.post(
-        'https://sneakers-server-2hes.onrender.com/orders',
-        {
-          items: cartItems,
-        }
-      )
+      const { data } = await axios.post(urls.ORDERS, {
+        items: cartItems,
+      })
       setOrderId(data.id)
       setIsOrderComplete(true)
       // удаляем все элементы, которые есть в корзине c сервера
-      cartItems.map((obj) => {
-        axios.delete(`https://sneakers-server-2hes.onrender.com/cart/${obj.id}`)
-      })
+      cartItems.map((obj) => axios.delete(`${urls.CART}/${obj.id}`))
       // отчищаем локально
       setCartItems([])
     } catch (error) {

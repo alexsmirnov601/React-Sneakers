@@ -3,21 +3,8 @@ import CardItem from '../components/card/CardItem'
 import axios from 'axios'
 import Empty from '../components/Empty'
 import { Link } from 'react-router-dom'
-
-const testArray = [
-  { id: 20 },
-  { id: 21 },
-  { id: 22 },
-  { id: 23 },
-  { id: 24 },
-  { id: 25 },
-  { id: 26 },
-  { id: 27 },
-  { id: 28 },
-  { id: 29 },
-  { id: 30 },
-  { id: 31 },
-]
+import { fakeArray } from '../utils/fakeArray'
+import { urls } from '../utils/urls'
 
 const Orders = () => {
   const [orders, setOrders] = React.useState([])
@@ -26,9 +13,7 @@ const Orders = () => {
   React.useEffect(() => {
     ;(async () => {
       try {
-        const { data } = await axios.get(
-          'https://sneakers-server-2hes.onrender.com/orders'
-        )
+        const { data } = await axios.get(urls.ORDERS)
         /* Так можно отчистить заказы
         data.map((obj) => {
           axios.delete(
@@ -47,14 +32,8 @@ const Orders = () => {
 
   const removeOrdersHandler = async () => {
     try {
-      const { data } = await axios.get(
-        'https://sneakers-server-2hes.onrender.com/orders'
-      )
-      data.map((obj) => {
-        axios.delete(
-          `https://sneakers-server-2hes.onrender.com/orders/${obj.id}`
-        )
-      })
+      const { data } = await axios.get(urls.ORDERS)
+      data.map((obj) => axios.delete(`${urls.ORDERS}/${obj.id}`))
       setOrders([])
     } catch (error) {
       console.log(error)
@@ -80,7 +59,7 @@ const Orders = () => {
             </h1>
           </div>
           <div className="grid">
-            {(isLoading ? testArray : orders).map((item) => (
+            {(isLoading ? fakeArray : orders).map((item) => (
               <CardItem key={item.id} loading={isLoading} {...item} />
             ))}
           </div>
